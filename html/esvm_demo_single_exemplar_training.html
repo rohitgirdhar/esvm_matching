@@ -1,0 +1,191 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>esvm_demo_single_exemplar_training</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2012-02-22"><meta name="DC.source" content="esvm_demo_single_exemplar_training.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Input query image</span>
+I = im2double(imread(<span class="string">'./images/eiffel_tower.jpg'</span>));
+
+<span class="comment">%Bounding-box of region-of-interest (which is usually entire images in case</span>
+<span class="comment">%of full image matching and object bounding-box in case of detection tasks.</span>
+bb = [1 1 size(I, 2) size(I, 1)];
+
+<span class="comment">%Folder that contains our negative image or rather dataset images that are</span>
+<span class="comment">%random images from web.</span>
+negFolder = <span class="string">'/home/abhinav/images/datasetImages/sampleDataset/'</span>;
+
+<span class="comment">%esvm_train_single_exemplar returns the trained model for given input,</span>
+<span class="comment">%trained against the given dataset of images.</span>
+models = esvm_train_single_exemplar(I, bb, negFolder);
+</pre><pre class="codeoutput">.esvm_get_pascal_stream: length of stream=00001
+.initialized with HOG_size = [15 11]
+</pre><img vspace="5" hspace="5" src="esvm_demo_single_exemplar_training_01.png" alt=""> <pre class="codeoutput">Randomizing mining queue
+Found 0023 windows, image:00046 (#seen=00001/00078, max = 26.197)
+Found 0028 windows, image:00044 (#seen=00002/00078, max = 25.547)
+Found 0015 windows, image:00008 (#seen=00003/00078, max = 17.840)
+Found 0022 windows, image:00047 (#seen=00004/00078, max = 25.163)
+Found 0077 windows, image:00022 (#seen=00005/00078, max = 29.818)
+Found 0011 windows, image:00058 (#seen=00006/00078, max = 19.339)
+Found 0041 windows, image:00016 (#seen=00007/00078, max = 23.732)
+Found 0037 windows, image:00021 (#seen=00008/00078, max = 28.582)
+Found 0030 windows, image:00034 (#seen=00009/00078, max = 26.719)
+Found 0020 windows, image:00074 (#seen=00010/00078, max = 23.905)
+Found 0033 windows, image:00077 (#seen=00011/00078, max = 22.591)
+Found 0129 windows, image:00024 (#seen=00012/00078, max = 26.922)
+Found 0050 windows, image:00025 (#seen=00013/00078, max = 29.304)
+Found 0027 windows, image:00042 (#seen=00014/00078, max = 27.016)
+Found 0014 windows, image:00072 (#seen=00015/00078, max = 22.786)
+Found 0029 windows, image:00056 (#seen=00016/00078, max = 25.668)
+Found 0019 windows, image:00013 (#seen=00017/00078, max = 19.719)
+Found 0026 windows, image:00037 (#seen=00018/00078, max = 23.192)
+Found 0049 windows, image:00003 (#seen=00019/00078, max = 24.592)
+Found 0035 windows, image:00062 (#seen=00020/00078, max = 28.908)
+Found 0033 windows, image:00011 (#seen=00021/00078, max = 29.256)
+Found 0037 windows, image:00051 (#seen=00022/00078, max = 25.015)
+Found 0036 windows, image:00049 (#seen=00023/00078, max = 26.144)
+Found 0056 windows, image:00060 (#seen=00024/00078, max = 26.450)
+Found 0020 windows, image:00009 (#seen=00025/00078, max = 17.771)
+Found 0020 windows, image:00005 (#seen=00026/00078, max = 25.620)
+Found 0045 windows, image:00065 (#seen=00027/00078, max = 31.421)
+Found 0032 windows, image:00054 (#seen=00028/00078, max = 26.650)
+Found 0027 windows, image:00063 (#seen=00029/00078, max = 24.303)
+Stopping mining because we have 1021 windows from 29 new violators
+# Violating images: 29, #Non-violating images: 0
+ -----
+Starting SVM: dim=5115... #pos=1, #neg=1021  --- Max positive is 1.000
+SVM iteration took 2.121 sec,  kept 258 negatives
+</pre><img vspace="5" hspace="5" src="esvm_demo_single_exemplar_training_02.png" alt=""> <pre class="codeoutput">Found 0002 windows, image:00040 (#seen=00030/00078, max = -0.953)
+Found 0004 windows, image:00059 (#seen=00031/00078, max = -0.899)
+Found 0001 windows, image:00067 (#seen=00032/00078, max = -1.000)
+Found 0007 windows, image:00053 (#seen=00033/00078, max = -0.922)
+Found 0001 windows, image:00048 (#seen=00034/00078, max = -0.913)
+Found 0002 windows, image:00007 (#seen=00035/00078, max = -0.957)
+Found 0000 windows, image:00071 (#seen=00036/00078)
+Found 0002 windows, image:00066 (#seen=00037/00078, max = -0.980)
+Found 0002 windows, image:00068 (#seen=00038/00078, max = -0.937)
+Found 0014 windows, image:00069 (#seen=00039/00078, max = -0.870)
+Found 0000 windows, image:00041 (#seen=00040/00078)
+Found 0001 windows, image:00031 (#seen=00041/00078, max = -0.984)
+Found 0002 windows, image:00070 (#seen=00042/00078, max = -0.963)
+Found 0006 windows, image:00017 (#seen=00043/00078, max = -0.920)
+Found 0007 windows, image:00064 (#seen=00044/00078, max = -0.902)
+Found 0001 windows, image:00029 (#seen=00045/00078, max = -0.988)
+Found 0005 windows, image:00061 (#seen=00046/00078, max = -0.832)
+Found 0003 windows, image:00026 (#seen=00047/00078, max = -0.964)
+Found 0005 windows, image:00019 (#seen=00048/00078, max = -0.924)
+Found 0003 windows, image:00052 (#seen=00049/00078, max = -0.897)
+Found 0002 windows, image:00027 (#seen=00050/00078, max = -0.959)
+Found 0000 windows, image:00036 (#seen=00051/00078)
+Found 0004 windows, image:00015 (#seen=00052/00078, max = -0.844)
+Found 0001 windows, image:00050 (#seen=00053/00078, max = -0.994)
+Found 0002 windows, image:00076 (#seen=00054/00078, max = -0.926)
+Found 0005 windows, image:00010 (#seen=00055/00078, max = -0.903)
+Found 0007 windows, image:00006 (#seen=00056/00078, max = -0.883)
+Found 0002 windows, image:00075 (#seen=00057/00078, max = -0.966)
+Found 0004 windows, image:00039 (#seen=00058/00078, max = -0.950)
+Found 0001 windows, image:00033 (#seen=00059/00078, max = -0.999)
+Found 0004 windows, image:00004 (#seen=00060/00078, max = -0.861)
+Found 0005 windows, image:00073 (#seen=00061/00078, max = -0.946)
+Found 0026 windows, image:00002 (#seen=00062/00078, max = -0.904)
+Found 0002 windows, image:00001 (#seen=00063/00078, max = -0.987)
+Found 0000 windows, image:00035 (#seen=00064/00078)
+Found 0001 windows, image:00045 (#seen=00065/00078, max = -0.991)
+Found 0005 windows, image:00014 (#seen=00066/00078, max = -0.893)
+Found 0006 windows, image:00023 (#seen=00067/00078, max = -0.961)
+Found 0004 windows, image:00018 (#seen=00068/00078, max = -0.927)
+Found 0001 windows, image:00012 (#seen=00069/00078, max = -1.000)
+Found 0013 windows, image:00020 (#seen=00070/00078, max = -0.939)
+Found 0004 windows, image:00057 (#seen=00071/00078, max = -0.881)
+Found 0003 windows, image:00030 (#seen=00072/00078, max = -0.958)
+Found 0001 windows, image:00038 (#seen=00073/00078, max = -0.999)
+Found 0005 windows, image:00078 (#seen=00074/00078, max = -0.910)
+Found 0001 windows, image:00028 (#seen=00075/00078, max = -0.934)
+Found 0001 windows, image:00043 (#seen=00076/00078, max = -0.948)
+Found 0002 windows, image:00055 (#seen=00077/00078, max = -0.944)
+Found 0002 windows, image:00032 (#seen=00078/00078, max = -0.989)
+# Violating images: 45, #Non-violating images: 4
+ -----
+Starting SVM: dim=5115... #pos=1, #neg=440  --- Max positive is 1.000
+SVM iteration took 1.730 sec,  kept 351 negatives
+</pre><img vspace="5" hspace="5" src="esvm_demo_single_exemplar_training_03.png" alt=""> <pre class="codeoutput"> ### End of training... 
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+
+%Input query image
+I = im2double(imread('./images/eiffel_tower.jpg'));
+
+%Bounding-box of region-of-interest (which is usually entire images in case
+%of full image matching and object bounding-box in case of detection tasks.
+bb = [1 1 size(I, 2) size(I, 1)];
+
+%Folder that contains our negative image or rather dataset images that are
+%random images from web.
+negFolder = '/home/abhinav/images/datasetImages/sampleDataset/';
+
+%esvm_train_single_exemplar returns the trained model for given input,
+%trained against the given dataset of images.
+models = esvm_train_single_exemplar(I, bb, negFolder);
+
+
+##### SOURCE END #####
+--></body></html>

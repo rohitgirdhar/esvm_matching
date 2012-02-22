@@ -1,23 +1,39 @@
 % DEMO: Training Exemplar-SVMs from a single image
 %
 % Copyright (C) 2011-12 by Tomasz Malisiewicz 
-% (restructured and edited by Abhinav Shrivastava)
+% (Restructured and edited by Abhinav Shrivastava)
 % All rights reserved. 
 %
 % This file is part of the Exemplar-SVM library and is made
 % available under the terms of the MIT license (see COPYING file).
 % Project homepage: https://github.com/quantombone/exemplarsvm
 %
-function [models] = my_esvm_train_exemplar(I, bb, negFolder)
-% Train model for a single image
+function [models] = esvm_train_single_exemplar(I, bb, negFolder)
+% Train model for a single image: esvm_train_single_exemplar returns the 
+% trained model for given input, trained against the given dataset of 
+% images.
 % [models]: Trained model
 % [I]: Input image in double format
 % [bb]: Bounding box of the object of interest 
 % (for complete image bb should be [1 1 size(I,2) size(I,1)] 
 % [negFolder]: Folder path (string) that contains negative images
 
+if nargin==0
+%Input query image
+    I = im2double(imread('./images/eiffel_tower.jpg'));
+
+%Bounding-box of region-of-interest (which is usually entire images in case
+%of full image matching and object bounding-box in case of detection tasks.
+    bb = [1 1 size(I, 2) size(I, 1)];
+
+%Folder that contains our negative image or rather dataset images that are
+%random images from web.
+    negFolder = '/home/abhinav/images/datasetImages/sampleDataset/';
+end
+
 addpath(genpath(pwd))
 
+%% Make Positive and Negative sets 
 [pos_set, neg_set] = esvm_get_positive_negative_sets(I, bb, negFolder);
 
 models_name = 'image';

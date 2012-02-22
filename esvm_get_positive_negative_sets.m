@@ -53,8 +53,8 @@ for i = 1
   end
 end
 
-files = dir(negFolder);
-files = files(3:end); %remove . and .. links.
+files = dir([negFolder '/*.jpg']);
+%files = files(3:end); %remove . and .. links.
 Ineg = cell(length(files),1);
 for i = 1:length(files)
   Ineg{i} = fullfile(negFolder, files(i).name);
