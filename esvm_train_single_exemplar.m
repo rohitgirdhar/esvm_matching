@@ -20,7 +20,7 @@ function [models] = esvm_train_single_exemplar(I, bb, negFolder)
 
 if nargin==0
 %Input query image
-    I = im2double(imread('./images/eiffel_tower.jpg'));
+    I = im2double(imread('./images/painting.jpg'));
 
 %Bounding-box of region-of-interest (which is usually entire images in case
 %of full image matching and object bounding-box in case of detection tasks.
@@ -28,7 +28,7 @@ if nargin==0
 
 %Folder that contains our negative image or rather dataset images that are
 %random images from web.
-    negFolder = '/home/abhinav/images/datasetImages/sampleDataset/';
+    negFolder = '~/datasetImages/';
 end
 
 addpath(genpath(pwd))

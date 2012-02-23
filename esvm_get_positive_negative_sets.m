@@ -53,9 +53,11 @@ for i = 1
   end
 end
 
-files = dir([negFolder '/*.jpg']);
-%files = files(3:end); %remove . and .. links.
-Ineg = cell(length(files),1);
-for i = 1:length(files)
-  Ineg{i} = fullfile(negFolder, files(i).name);
-end
+
+endings = {'jpg','png','gif','JPEG','JPG', 'jpeg', 'bmp'};
+files = cellfun(@(x)dir([negFolder '/*.' x]), endings, 'UniformOutput', ...
+    false);
+files = cat(1,files{:});
+Ineg = cellfun(@(x)[negFolder '/' x],{files.name}, 'UniformOutput', ...
+    false);
+    
