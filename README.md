@@ -6,8 +6,8 @@ in Robotics.
 The code is written in Matlab and is the basis of the following two
 projects, as well as my doctoral dissertation:
 
-# [Tomasz Malisiewicz](http://www.cs.cmu.edu/~tmalisie/), [Abhinav Gupta](http://www.cs.cmu.edu/~abhinavg), [Alexei A. Efros](http://www.cs.cmu.edu/~efros). Ensemble of Exemplar-SVMs for Object Detection and Beyond. In ICCV, 2011. [PDF](http://www.cs.cmu.edu/~tmalisie/projects/iccv11/exemplarsvm-iccv11.pdf) | [Project Page](http://www.cs.cmu.edu/~tmalisie/projects/iccv11/) 
-# [Abhinav Shrivastava](http://www.abhinav-shrivastava.info/), [Tomasz Malisiewicz](http://www.cs.cmu.edu/~tmalisie/), [Abhinav Gupta](http://www.cs.cmu.edu/~abhinavg), [Alexei A. Efros](http://www.cs.cmu.edu/~efros). Data-driven Visual Similarity for Cross-domain Image Matching. In SIGGRAPH ASIA, December 2011. [PDF](http://www.cs.cmu.edu/~tmalisie/projects/sa11/shrivastava-sa11.pdf) | [Project Page](http://graphics.cs.cmu.edu/projects/crossDomainMatching/)
+[Tomasz Malisiewicz](http://www.cs.cmu.edu/~tmalisie/), [Abhinav Gupta](http://www.cs.cmu.edu/~abhinavg), [Alexei A. Efros](http://www.cs.cmu.edu/~efros). Ensemble of Exemplar-SVMs for Object Detection and Beyond. In ICCV, 2011. [PDF](http://www.cs.cmu.edu/~tmalisie/projects/iccv11/exemplarsvm-iccv11.pdf) | [Project Page](http://www.cs.cmu.edu/~tmalisie/projects/iccv11/) 
+[Abhinav Shrivastava](http://www.abhinav-shrivastava.info/), [Tomasz Malisiewicz](http://www.cs.cmu.edu/~tmalisie/), [Abhinav Gupta](http://www.cs.cmu.edu/~abhinavg), [Alexei A. Efros](http://www.cs.cmu.edu/~efros). Data-driven Visual Similarity for Cross-domain Image Matching. In SIGGRAPH ASIA, December 2011. [PDF](http://www.cs.cmu.edu/~tmalisie/projects/sa11/shrivastava-sa11.pdf) | [Project Page](http://graphics.cs.cmu.edu/projects/crossDomainMatching/)
 
 ---
 
