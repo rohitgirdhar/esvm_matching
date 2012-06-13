@@ -43,6 +43,22 @@ $ matlab
 >> esvm_compile
 ```
 
+## Download query and negative images from the [project website](http://graphics.cs.cmu.edu/projects/crossDomainMatching/).
+
+## Demo: Training exemplar-SVM for one image
+
+See the demo walk-through [tutorial/esvm_demo_single_exemplar_training.html](http://graphics.cs.cmu.edu/projects/crossDomainMatching/tutorial/esvm_demo_single_exemplar_training.html) for step-by-step instructions on training Exemplar-SVMs on single images.
+
+## Demo: Example of applying models to a single image or a set of images
+
+See the demo walk-through [tutorial/esvm_demo_apply.html](http://people.csail.mit.edu/tomasz/exemplarsvm/tutorial/esvm_demo_apply.html) for a step-by-step tutorial on applying Exemplar-SVMs to images.
+Or you can just run the demo:
+
+``` sh
+>> esvm_demo_apply;
+```
+
+
 ## Download and load pre-trained VOC2007 model(s)
 ``` sh
 $ matlab
@@ -61,15 +77,6 @@ $ matlab
 ```
 
 You can alternatively download the pre-trained models individually from [http://people.csail.mit.edu/tomasz/exemplarsvm/models/](http://people.csail.mit.edu/tomasz/exemplarsvm/models/) or a tar file of all models [voc2007-models.tar](http://people.csail.mit.edu/tomasz/exemplarsvm/models/voc2007-models.tar) (NOTE: tar file is 450MB)
-
-## Demo: Example of applying models to a single image or a set of images
-
-See the demo walk-through [tutorial/esvm_demo_apply.html](http://people.csail.mit.edu/tomasz/exemplarsvm/tutorial/esvm_demo_apply.html) for a step-by-step tutorial on applying Exemplar-SVMs to images.
-Or you can just run the demo:
-
-``` sh
->> esvm_demo_apply;
-```
 
 # Training an Ensemble of Exemplar-SVMs
 
