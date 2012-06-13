@@ -43,21 +43,21 @@ $ matlab
 >> esvm_compile
 ```
 
-## Download query and negative images from the [project website](http://graphics.cs.cmu.edu/projects/crossDomainMatching/).
+# Quick Guide for SIGGRAPH Asia paper
 
-## Demo: Training exemplar-SVM for one image
+# Download query and negative images from the [project website](http://graphics.cs.cmu.edu/projects/crossDomainMatching/).
 
+# Demo: Training exemplar-SVM for one image
 See the demo walk-through [tutorial/esvm_demo_single_exemplar_training.html](http://graphics.cs.cmu.edu/projects/crossDomainMatching/tutorial/esvm_demo_single_exemplar_training.html) for step-by-step instructions on training Exemplar-SVMs on single images.
 
-## Demo: Example of applying models to a single image or a set of images
-
+# Demo: Example of applying models to a single image or a set of images
 See the demo walk-through [tutorial/esvm_demo_apply.html](http://people.csail.mit.edu/tomasz/exemplarsvm/tutorial/esvm_demo_apply.html) for a step-by-step tutorial on applying Exemplar-SVMs to images.
 Or you can just run the demo:
-
 ``` sh
 >> esvm_demo_apply;
 ```
 
+# Quick Guide for ICCV paper for PASCAL Object Detection Task
 
 ## Download and load pre-trained VOC2007 model(s)
 ``` sh
@@ -154,6 +154,7 @@ $ ./sc.sh "cd ~/projects/exemplarsvm; addpath(genpath(pwd)); esvm_script_train_v
 ```
 
 --- 
+**Updated by Abhinav Shrivastava**
 **Copyright (C) 2011 by Tomasz Malisiewicz**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
