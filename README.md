@@ -47,8 +47,11 @@ $ matlab
 
 ### Download query and negative images from the [project website](http://graphics.cs.cmu.edu/projects/crossDomainMatching/).
 
-### Demo: Training exemplar-SVM for one image
-See the demo walk-through [tutorial/esvm_demo_single_exemplar_training.html](http://graphics.cs.cmu.edu/projects/crossDomainMatching/tutorial/esvm_demo_single_exemplar_training.html) for step-by-step instructions on training Exemplar-SVMs on single images.
+### Demo Script: Training exemplar-SVM for one image
+See the demo walk-through [tutorial/esvm_demo_single_exemplar_training.html](http://graphics.cs.cmu.edu/projects/crossDomainMatching/tutorial/esvm_demo_single_exemplar_training.html) for instructions on training Exemplar-SVMs for single images.
+
+### Function Description: Training exemplar-SVM for one image
+See the detailed explanation [tutorial/esvm_train_single_exemplar.html](http://graphics.cs.cmu.edu/projects/crossDomainMatching/tutorial/esvm_train_single_exemplar.html) of the function for training Exemplar-SVMs for single images.
 
 ### Demo: Example of applying models to a single image or a set of images
 See the demo walk-through [tutorial/esvm_demo_apply.html](http://people.csail.mit.edu/tomasz/exemplarsvm/tutorial/esvm_demo_apply.html) for a step-by-step tutorial on applying Exemplar-SVMs to images.
