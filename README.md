@@ -43,6 +43,8 @@ $ matlab
 >> esvm_compile
 ```
 
+----
+
 # Quick Guide for SIGGRAPH Asia paper
 
 ### Download query and negative images from the [project website](http://graphics.cs.cmu.edu/projects/crossDomainMatching/).
@@ -59,6 +61,8 @@ Or you can just run the demo:
 ``` sh
 >> esvm_demo_apply;
 ```
+
+----
 
 # Quick Guide for ICCV paper for PASCAL Object Detection Task
 
@@ -158,6 +162,7 @@ $ ./sc.sh "cd ~/projects/exemplarsvm; addpath(genpath(pwd)); esvm_script_train_v
 
 --- 
 **Updated by Abhinav Shrivastava**
+
 **Copyright (C) 2011 by Tomasz Malisiewicz**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
