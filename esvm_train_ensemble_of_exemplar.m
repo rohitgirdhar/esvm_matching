@@ -8,6 +8,8 @@
 % available under the terms of the MIT license (see COPYING file).
 % Project homepage: https://github.com/quantombone/exemplarsvm
 %
+%%% TODO (Rohit) : This also needs calibration!! .. compute M matrix, see
+%%% code for training for VOC
 function [models] = esvm_train_ensemble_of_exemplar(posFolder, bbsFile, ...
                                                     negFolder)
 % Train model for a single image: esvm_train_single_exemplar returns the 
