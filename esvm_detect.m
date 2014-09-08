@@ -7,6 +7,10 @@ function [resstruct,feat_pyramid] = esvm_detect(I, models, params)
 % large, then the BLOCK feature matrix method (with a single matrix
 % multiplication) is used.
 %
+% (rohit) fconvblas simply convolves the hog descriptor with the
+% query image and notes the reqions that give the max score (W^T*W).
+% No SVM etc at this stage, simple matrix multiplication
+%
 % NOTE: These local detections can be pooled with esvm_pool_exemplars_dets.m
 %
 % I: Input image (or already precomputed pyramid)

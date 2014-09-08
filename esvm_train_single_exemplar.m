@@ -47,6 +47,13 @@ params.model_type = 'exemplar';
 %enable display so that nice visualizations pop up during learning
 params.dataset_params.display = 1;
 
+%Ignore part of the image in learning
+sel = figure('Name', 'Select the bounding box to ignore');
+imshow(I);
+params.ignore_bb = getrect(sel);
+params.ignore_bb
+close(sel);
+
 %if localdir is not set, we do not dump files
 %params.dataset_params.localdir = '/nfs/baikal/tmalisie/synthetic/';
 
@@ -71,7 +78,15 @@ e_stream_set = esvm_get_pascal_stream(stream_params, params.dataset_params);
 % image shows the initial HOG features used to define the exemplar.
 initial_models = esvm_initialize_exemplars(e_stream_set, params, ...
                                            models_name);
-
+model_sz = size(initial_models{1}.model.w);
+img_sz = size(I);
+initial_models{1}.model.w( ...
+    uint32(params.ignore_bb(2) * model_sz(1) / img_sz(1)): uint32(params.ignore_bb(2) * model_sz(1) / img_sz(1) + params.ignore_bb(4) * model_sz(1) / img_sz(1)), ...
+    uint32(params.ignore_bb(1) * model_sz(2) / img_sz(2)): uint32(params.ignore_bb(1) * model_sz(2) / img_sz(2) + params.ignore_bb(3) * model_sz(2) / img_sz(2)), ...
+    :) = 0;
+figure;
+imshow(HOGpicture(initial_models{1}.model.w));
+                                       
 %% Set exemplar-svm training parameters
 train_params = params;
 train_params.detect_max_scale = 1.0;
