@@ -1,5 +1,5 @@
-function NR = esvm_show_transfer_figure(I, models, topboxes, overlays, ...
-                                        current_rank, corr)
+function [NR, fig] = esvm_show_transfer_figure(I, models, topboxes, overlays, ...
+                                        current_rank, corr, fig)
 % Show a figure with the detections of the exemplar svm model
 % NOTE(TJM): this function needs cleanup, but works in the pipeline
 %
@@ -16,8 +16,6 @@ topboxes = topboxes(1:min(2,size(topboxes,1)),:);
 %add_one = 1;
 add_one = 0;
   
-figure(1)
-clf
 if add_one == 1
   ha = tight_subplot(2, 2, .05, ...
                      .1, .01);
@@ -186,6 +184,7 @@ Ishow = cat(1,I,I2,extraI);
 imagesc(Ishow)
 axis image
 axis off
+
 %title(sprintf('Detection (Rank=%d, Score=%.3f)',current_rank, ...
 %              topboxes(1,end)))
 

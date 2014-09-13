@@ -95,6 +95,18 @@ if 0
   bb = bb(find(has_3d));
 end
 
+wwwdir = sprintf('%s/www/%s.%s%s/',params.dataset_params.localdir,...
+        set_name, ...
+        models{1}.models_name,test_struct.calib_string);
+if ~exist(wwwdir,'dir') && (CACHE_FILES == 1)
+    mkdir(wwwdir);
+end
+
+fid = -1;
+if CACHE_FILES == 1
+    fid = fopen(fullfile(wwwdir, 'top.txt'), 'w');
+end
+
 counter = 1;
 
 for k = 1:maxk
@@ -109,13 +121,7 @@ for k = 1:maxk
       break;
     end
     
-    wwwdir = sprintf('%s/www/%s.%s%s/',params.dataset_params.localdir,...
-                     set_name, ...
-                     models{1}.models_name,test_struct.calib_string);
-    if ~exist(wwwdir,'dir') && (CACHE_FILES == 1)
-      mkdir(wwwdir);
-    end
-    
+        
     filer = sprintf('%s/%05d%s.png',wwwdir,k,suffix);
     filerlock = [filer '.lock'];
 
@@ -133,6 +139,9 @@ for k = 1:maxk
     %curid = grid{imids(curb)}.curid;
 
     I = (convert_to_I(test_set{bbs(bb(counter),11)}));
+    [match_path, match_imgname, ~] = fileparts(test_set{bbs(bb(counter), 11)});
+    [~, match_classname, ~] = fileparts(match_path);
+    fprintf(fid, '%s\n', fullfile(match_classname, match_imgname));
     
     TARGET_BUS = -1;
 
@@ -229,12 +238,16 @@ for k = 1:maxk
       gtim = zeros(size(I,1),size(I,2));
     end
     
-    figure(1)
+    if CACHE_FILES == 1
+        fig = figure('visible', 'off');
+    else
+        fig = figure(1);
+    end
     clf
 
     current_rank = k;
-    NR = esvm_show_transfer_figure(I, models, allbb, ...
-                                   overlays, current_rank, corr);
+    [NR, fig] = esvm_show_transfer_figure(I, models, allbb, ...
+                                   overlays, current_rank, corr, fig);
     axis image
     drawnow
     snapnow
@@ -242,6 +255,7 @@ for k = 1:maxk
     if CACHE_FILES == 1
       %print(gcf,'-depsc2',filer);
       print(gcf,'-dpng',filer);
+      saveas(fig, filer);
       %finalfile = strrep(filer,'.eps','.pdf');
       %unix(sprintf('zsh "ps2pdf -dEPSCrop -dPDFSETTINGS=/prepress %s %s"',...
       %             filer,finalfile));
@@ -262,3 +276,8 @@ for k = 1:maxk
     counter = counter+1;    
   end
 end
+
+if (CACHE_FILES == 1)
+    fclose(fid);
+end
+

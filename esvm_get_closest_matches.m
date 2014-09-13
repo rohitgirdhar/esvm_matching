@@ -13,22 +13,11 @@ frpaths(cellfun(@isempty, imgFilesOrNot)) = []; % keep only image files
 
 params = esvm_get_default_params;
 fullpaths = cellfun2(@(x) fullfile(imgsDir, x), frpaths);
-imgsChunkSize = 50; % read images in chunks of this size
-numImgsDone = 0;
-all_local_detections = {};
-while numImgsDone < numel(fullpaths)
-    fprintf('Chunk %d to %d\n', numImgsDone + 1, numImgsDone + imgsChunkSize);
-    imgset = cellfun2(@(x) imread(x), ...
-        fullpaths(numImgsDone + 1 : min(numImgsDone + imgsChunkSize, end)));
-    local_detections = esvm_detect_imageset(imgset, models, params);
-    local_detections = cellfun(@(x) {addToIndex(x, numImgsDone)}, local_detections);
-    all_local_detections = [all_local_detections; local_detections];
-    numImgsDone = numImgsDone + numel(imgset);
-end
-result_struct = esvm_pool_exemplar_dets(all_local_detections, models, [], params);
-esvm_show_top_dets(result_struct, all_local_detections, ...
+local_detections = esvm_detect_imageset(fullpaths, models, params);
+result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
+params.dataset_params.localdir = 'res';
+[~, imgs_dirname, ~] = fileparts(imgsDir);
+esvm_show_top_dets(result_struct, local_detections, ...
                               fullpaths, models, ...
-                              params,  topk);
+                              params,  topk, imgs_dirname);
 
-function [x] = addToIndex(x, numImgsDone)
-x.index = x.index + numImgsDone;
