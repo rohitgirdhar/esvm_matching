@@ -11,18 +11,24 @@ frpaths = getAllFiles(imgsDir); % recursive search img files relative to imgsDir
 imgFilesOrNot = regexp(frpaths, endings);
 frpaths(cellfun(@isempty, imgFilesOrNot)) = []; % keep only image files
 
-fullpaths = cellfun2(@(x) fullfile(imgsDir, x), frpaths);
-%%% TODO (Rohit) : break this into chunks, can't read 10000s of images at
-%%% once
-imgset = cellfun2(@(x) imread(x), fullpaths);
 params = esvm_get_default_params;
-local_detections = esvm_detect_imageset(imgset, models, params);
-result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
-allbbs = esvm_show_top_dets(result_struct, local_detections, ...
-                              imgset, models, ...
-                              params,  topk);
-fprintf('%*s : score\n', 40, 'matching image name');
-for i = 1 : size(allbbs, 1)
-    fprintf('%*s : %0.5f\n', 40, frpaths{allbbs(i, 11)}, allbbs(i, 12));
+fullpaths = cellfun2(@(x) fullfile(imgsDir, x), frpaths);
+imgsChunkSize = 50; % read images in chunks of this size
+numImgsDone = 0;
+all_local_detections = {};
+while numImgsDone < numel(fullpaths)
+    fprintf('Chunk %d to %d\n', numImgsDone + 1, numImgsDone + imgsChunkSize);
+    imgset = cellfun2(@(x) imread(x), ...
+        fullpaths(numImgsDone + 1 : min(numImgsDone + imgsChunkSize, end)));
+    local_detections = esvm_detect_imageset(imgset, models, params);
+    local_detections = cellfun(@(x) {addToIndex(x, numImgsDone)}, local_detections);
+    all_local_detections = [all_local_detections; local_detections];
+    numImgsDone = numImgsDone + numel(imgset);
 end
+result_struct = esvm_pool_exemplar_dets(all_local_detections, models, [], params);
+esvm_show_top_dets(result_struct, all_local_detections, ...
+                              fullpaths, models, ...
+                              params,  topk);
 
+function [x] = addToIndex(x, numImgsDone)
+x.index = x.index + numImgsDone;
