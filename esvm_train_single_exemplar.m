@@ -8,7 +8,7 @@
 % available under the terms of the MIT license (see COPYING file).
 % Project homepage: https://github.com/quantombone/exemplarsvm
 %
-function [models] = esvm_train_single_exemplar(I, bb, negFolder)
+function [models] = esvm_train_single_exemplar(I, bb, negFolder, modelName)
 % Train model for a single image: esvm_train_single_exemplar returns the 
 % trained model for given input, trained against the given dataset of 
 % images.
@@ -17,6 +17,9 @@ function [models] = esvm_train_single_exemplar(I, bb, negFolder)
 % [bb]: Bounding box of the object of interest 
 % (for complete image bb should be [1 1 size(I,2) size(I,1)] 
 % [negFolder]: Folder path (string) that contains negative images
+% [modelName]: Name of the model to be trained. Very important when saving
+% results, since they will be in a folder addressed by this. So make sure 
+% models are named uniquely.
 
 if nargin==0
 %Input query image
@@ -36,7 +39,11 @@ addpath(genpath(pwd))
 %% Make Positive and Negative sets 
 [pos_set, neg_set] = esvm_get_positive_negative_sets(I, bb, negFolder);
 
-models_name = 'image';
+if exist('modelName', 'var')
+    models_name = modelName;
+else
+    models_name = 'hotel';
+end
 
 %% Set exemplar-initialization parameters
 params = esvm_get_default_params;
