@@ -14,7 +14,10 @@ if isempty(trainList)
     imgFilesOrNot = regexp(frpaths, endings);
     frpaths(cellfun(@isempty, imgFilesOrNot)) = []; % keep only image files
 else
-    fid = fopen(trainList);
+    [fid, err] = fopen(trainList);
+    if fid == -1
+        fprintf('Unable to open %s due to %s\n', trainList, err);
+    end
     frpaths = textscan(fid, '%s\n');
     frpaths = frpaths{1};
     fclose(fid);

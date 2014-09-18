@@ -126,7 +126,6 @@ for k = 1:maxk
     filerlock = [filer '.lock'];
 
     if CACHE_FILES && (fileexists(filer) || (mymkdir_dist(filerlock) == 0))
-      counter = counter + 1;
       fprintf(1,'Already showed detection # %d, score=%.3f\n', k, bbs(bb(counter),end));
       continue
     end
