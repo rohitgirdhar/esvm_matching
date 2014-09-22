@@ -8,7 +8,8 @@
 % available under the terms of the MIT license (see COPYING file).
 % Project homepage: https://github.com/quantombone/exemplarsvm
 %
-function [models] = esvm_train_single_exemplar(I, bb, negFolder, modelName)
+function [models] = esvm_train_single_exemplar(I, bb, negFolder, modelName, ...
+        varargin)
 % Train model for a single image: esvm_train_single_exemplar returns the 
 % trained model for given input, trained against the given dataset of 
 % images.
@@ -20,6 +21,7 @@ function [models] = esvm_train_single_exemplar(I, bb, negFolder, modelName)
 % [modelName]: Name of the model to be trained. Very important when saving
 % results, since they will be in a folder addressed by this. So make sure 
 % models are named uniquely.
+% ['mask_img', M] a mask image to remove certain parts of the hog descriptor and train
 
 if nargin==0
 %Input query image
@@ -35,6 +37,11 @@ if nargin==0
 end
 
 addpath(genpath(pwd))
+
+p = inputParser;
+addOptional(p, 'mask_img', ones(size(I, 1), size(I, 2)));
+parse(p, varargin{:});
+img_mask = p.Results.mask_img;
 
 %% Make Positive and Negative sets 
 [pos_set, neg_set] = esvm_get_positive_negative_sets(I, bb, negFolder);
@@ -78,6 +85,10 @@ e_stream_set = esvm_get_pascal_stream(stream_params, params.dataset_params);
 % image shows the initial HOG features used to define the exemplar.
 initial_models = esvm_initialize_exemplars(e_stream_set, params, ...
                                            models_name);
+img_mask = imresize(img_mask, size(initial_models{1}.model.mask));
+img_mask(img_mask < 0.8) = 0;
+img_mask(img_mask >= 0.8) = 1;
+initial_models{1}.model.mask = initial_models{1}.model.mask .* img_mask;
 
 %% Set exemplar-svm training parameters
 train_params = params;
@@ -96,3 +107,4 @@ train_params.detect_max_windows_per_exemplar = 400;
 % 1:N support vectors.
 [models] = esvm_train_exemplars(initial_models, ...
                                 neg_set, train_params);
+
