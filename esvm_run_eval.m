@@ -1,18 +1,26 @@
 function esvm_run_eval(imgsDir, trainFilesListFpath, ...
-        testFilesListFpath, negFolder)
+        testFilesListFpath, negFolder, varargin)
 % imgsDir : path to directory with all images
 % testFilesListFpath : path to file with test images, wrt imgsDir
 % trainFilesListFpath : path to file with train images, wrt imgsDir
 
 % Use this folder to sync the running of multiple instances of this func
-SYNC_FOLDER = 'run-sync/';
+
+p = inputParser;
+addOptional(p, 'sync_folder', 'run_sync'); % set directory to use for syncing processes
+addOptional(p, 'cache_models', []); % set to directory path to cache models, else set to 0
+addOptional(p, 'res_folder', 'res'); % The folder to save result images
+parse(p, varargin{:});
+
+SYNC_FOLDER = p.Results.sync_folder;
 if ~exist(SYNC_FOLDER, 'dir')
     mkdir(SYNC_FOLDER);
 end
-CACHE_DIR = 'models-cache';
-if ~exist(CACHE_DIR, 'dir')
+CACHE_DIR = p.Results.cache_models;
+if ~isempty(CACHE_DIR) && ~exist(CACHE_DIR, 'dir')
     mkdir(CACHE_DIR);
 end
+
 fid = fopen(testFilesListFpath);
 testFilesList = textscan(fid, '%s\n');
 testFilesList = testFilesList{1};
@@ -33,7 +41,7 @@ for i = 1 : numel(testFilesList)
       continue;  
     end
     mkdir(fullfile(SYNC_FOLDER, [test_hash, '.lock']));
-    % to cleanup in case of forced exit or kill
+    % to remove lock file in case of forced exit or kill
     cleanupObj = onCleanup(@() rmdir(fullfile(SYNC_FOLDER, [test_hash, '.lock'])));
 
     try
@@ -42,21 +50,30 @@ for i = 1 : numel(testFilesList)
         % resize, if larger than 640xX
         I = imresize(I, [640, NaN]);
         model_cache_path = fullfile(CACHE_DIR, ['model_' test_hash '.mat']);
-        if exist(model_cache_path, 'file')
+        if ~isempty(CACHE_DIR) && exist(model_cache_path, 'file')
             load(model_cache_path);
             fprintf('Read the model from file: %s\n', model_cache_path);
         else
             models = esvm_train_single_exemplar(I, ...
-                [1 1 size(I, 2) size(I, 1)], negFolder, img_id);
-            save(model_cache_path, 'models');
+                [1 1 size(I, 2) size(I, 1)], negFolder, ...
+                img_id);
+            if ~isempty(CACHE_DIR)
+                save(model_cache_path, 'models');
+            end
+            esvm_get_closest_matches(models, imgsDir, trainFilesListFpath, ...
+                    20, 'res_folder', p.Results.res_folder);
         end
-        esvm_get_closest_matches(models, imgsDir, trainFilesListFpath, 20);
+
         mkdir(fullfile(SYNC_FOLDER, [test_hash, '.done']));
-    catch
+    catch e
+        fprintf(2, '%s\n', getReport(e));
     end
+
     try % since it might have been removed 
         rmdir(fullfile(SYNC_FOLDER, [test_hash, '.lock']));
     catch
     end
+    clearvars -except testFilesList p SYNC_FOLDER CACHE_DIR ...
+            imgsDir trainFilesListFpath testFilesListFpath negFolder;
 end
 
