@@ -11,6 +11,7 @@ function esvm_get_closest_matches(models, imgsDir, trainList, topk, varargin)
 p = inputParser;
 addOptional(p, 'res_folder', 'res');
 parse(p, varargin{:});
+addpath(genpath('.'));
 
 if isempty(trainList)
     endings = '((.jpg)|(.png)|(.gif)|(.JPEG)|(.JPG)|(.jpeg)|(.bmp))$';
@@ -29,7 +30,7 @@ end
 
 params = esvm_get_default_params;
 params.dataset_params.localdir = p.Results.res_folder;
-fullpaths = cellfun2(@(x) fullfile(imgsDir, x), frpaths);
+fullpaths = cellfun(@(x) fullfile(imgsDir, x), frpaths, 'UniformOutput', false);
 local_detections = esvm_detect_imageset(fullpaths, models, params);
 result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
 [~, imgs_dirname, ~] = fileparts(imgsDir);
