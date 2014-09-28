@@ -4,3 +4,7 @@ data/
 subber.mat
 *.swp
 *.m~
+res
+models-cache
+run-sync
+tags
