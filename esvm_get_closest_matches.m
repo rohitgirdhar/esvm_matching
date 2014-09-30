@@ -10,11 +10,14 @@ function esvm_get_closest_matches(models, imgsDir, trainList, topk, varargin)
 
 p = inputParser;
 addOptional(p, 'res_folder', 'res');
+% just search in head_trainFile top elements of the trainFile.
+% Useful when passing bow outputs
+addOptional(p, 'head_trainFile', -1);
 parse(p, varargin{:});
 addpath(genpath('.'));
 
+endings = '((.jpg)|(.png)|(.gif)|(.JPEG)|(.JPG)|(.jpeg)|(.bmp))$';
 if isempty(trainList)
-    endings = '((.jpg)|(.png)|(.gif)|(.JPEG)|(.JPG)|(.jpeg)|(.bmp))$';
     frpaths = getAllFiles(imgsDir); % recursive search img files relative to imgsDir
     imgFilesOrNot = regexp(frpaths, endings);
     frpaths(cellfun(@isempty, imgFilesOrNot)) = []; % keep only image files
@@ -25,7 +28,13 @@ else
     end
     frpaths = textscan(fid, '%s\n');
     frpaths = frpaths{1};
+    flter = cellfun(@(x)~isempty(x), ...
+            regexp(frpaths, endings, 'ONCE'));
+    frpaths = frpaths(flter, :);
     fclose(fid);
+end
+if p.Results.head_trainFile > 0
+    frpaths = frpaths(1 : p.Results.head_trainFile);
 end
 
 params = esvm_get_default_params;

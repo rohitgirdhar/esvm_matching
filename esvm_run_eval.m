@@ -10,6 +10,7 @@ p = inputParser;
 addOptional(p, 'sync_folder', 'run_sync'); % set directory to use for syncing processes
 addOptional(p, 'cache_models', []); % set to directory path to cache models, else set to 0
 addOptional(p, 'res_folder', 'res'); % The folder to save result images
+addOptional(p, 'bow_res', '~/projects/001_ESVM/BoW/BoWImageSearch/eval/results/res_with_dist'); % The folder where BoW results might be present
 parse(p, varargin{:});
 
 SYNC_FOLDER = p.Results.sync_folder;
@@ -60,9 +61,20 @@ for i = 1 : numel(testFilesList)
             if ~isempty(CACHE_DIR)
                 save(model_cache_path, 'models');
             end
-            esvm_get_closest_matches(models, imgsDir, trainFilesListFpath, ...
-                    20, 'res_folder', p.Results.res_folder);
         end
+
+        head_trainFile = -1; % search in all imgs in trainFile
+        % check if BoW results exist - use those first
+        fpath = fullfile(p.Results.bow_res, cls, fname, 'top.txt');
+        if exist(fpath, 'file')
+            trainFilesListFpath = fpath;
+            head_trainFile = 5000; % search in top 5000
+        end
+
+        esvm_get_closest_matches(models, imgsDir, trainFilesListFpath, ...
+                20, 'res_folder', p.Results.res_folder, ...
+                'head_trainFile', head_trainFile);
+
 
         mkdir(fullfile(SYNC_FOLDER, [test_hash, '.done']));
     catch e
