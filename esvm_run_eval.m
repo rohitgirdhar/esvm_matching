@@ -87,5 +87,7 @@ for i = 1 : numel(testFilesList)
     end
     clearvars -except testFilesList p SYNC_FOLDER CACHE_DIR ...
             imgsDir trainFilesListFpath testFilesListFpath negFolder;
+    close all; % remove all the visualization plots from the memory
+    pack; % consolidate all memory
 end
 
