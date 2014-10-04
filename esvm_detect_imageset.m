@@ -141,6 +141,7 @@ for i = 1:length(ordering)
     % end
 
     coarse_boxes = cat(1,rs.bbs{:});
+    coarse_pos_wt_masks = cat(1, rs.pos_wt_masks{:});
     if ~isempty(coarse_boxes)
       coarse_boxes(:,11) = index;
       scores = coarse_boxes(:,end);
@@ -159,10 +160,12 @@ for i = 1:length(ordering)
       goods = find(os >= params.detect_min_scene_os);
       boxes = boxes(goods,:);
       coarse_boxes = coarse_boxes(goods,:);
+      coarse_pos_wt_masks = coarse_pos_wt_masks(goods, :);
     end
     
     extras = [];
     res{j}.coarse_boxes = coarse_boxes;
+    res{j}.coarse_pos_wt_masks = coarse_pos_wt_masks;
     res{j}.bboxes = boxes;
 
     res{j}.index = index;

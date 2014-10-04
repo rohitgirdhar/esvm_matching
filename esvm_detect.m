@@ -73,6 +73,7 @@ for q = 1:length(rs1.bbs)
 
 
   rs1.bbs{q} = cat(1,rs1.bbs{q},rs2.bbs{q});
+  rs1.pos_wt_masks{q} = [rs1.pos_wt_masks{q}, rs2.pos_wt_masks{q}];
 end
 
 resstruct = rs1;
@@ -128,6 +129,7 @@ t = get_pyramid(I, sbin, params);
 
 resstruct.padder = t.padder;
 resstruct.bbs = cell(N,1);
+resstruct.pos_wt_masks = cell(N,1);
 xs = cell(N,1);
 
 maxers = cell(N,1);
@@ -189,7 +191,13 @@ for level = length(t.hog):-1:1
                         indexes);
     
     scale = t.scales(level);
-    
+
+    for bbox_id = 1 : numel(uus)
+        hit_hog = featr(uus(bbox_id) : uus(bbox_id) + size(ws{exid}, 1) - 1, ...
+                vvs(bbox_id) : vvs(bbox_id) + size(ws{exid}, 2) - 1, :);
+        pos_wt_masks{bbox_id} = sum(hit_hog .* ws{exid}, 3);
+    end
+
     o = [uus vvs] - t.padder;
 
     bbs = ([o(:,2) o(:,1) o(:,2)+size(ws{exid},2) ...
@@ -210,6 +218,7 @@ for level = length(t.hog):-1:1
     end
     
     resstruct.bbs{exid} = cat(1,resstruct.bbs{exid},bbs);
+    resstruct.pos_wt_masks{exid} = [resstruct.pos_wt_masks{exid}, pos_wt_masks];
     
     if params.detect_save_features == 1
       for z = 1:NKEEP
@@ -224,6 +233,7 @@ for level = length(t.hog):-1:1
       newtopk = min(params.detect_max_windows_per_exemplar,size(resstruct.bbs{exid},1));
       [aa,bb] = psort(-resstruct.bbs{exid}(:,end),newtopk);
       resstruct.bbs{exid} = resstruct.bbs{exid}(bb,:);
+      resstruct.pos_wt_masks{exid} = resstruct.pos_wt_masks{exid}(bb);
       if params.detect_save_features == 1
         xs{exid} = xs{exid}(:,bb);
       end
@@ -425,7 +435,9 @@ if ~isfield(params,'detect_exemplar_nms_os_threshold') || (params.detect_exempla
   return;
 end
 
-rs.bbs = cellfun2(@(x)esvm_nms(x,params.detect_exemplar_nms_os_threshold),rs.bbs);
+[rs.bbs, picks] = cellfun(@(x)esvm_nms(x, ...
+    params.detect_exemplar_nms_os_threshold),rs.bbs, 'UniformOutput', false);
+rs.pos_wt_masks = cellfun(@(x, y)x(y), rs.pos_wt_masks, picks, 'UniformOutput', false);
 
 if ~isempty(rs.xs)
   for i = 1:length(rs.bbs)

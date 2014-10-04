@@ -1,4 +1,4 @@
-function top = esvm_nms(boxes, overlap)
+function [top,pick] = esvm_nms(boxes, overlap)
 % top = esvm_nms(boxes, overlap)
 % Non-maximum suppression. (FAST VERSION)
 % Greedily select high-scoring detections and skip detections

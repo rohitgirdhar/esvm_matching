@@ -28,6 +28,7 @@ end
 %cls = models{1}.cls;
 %excurids = cellfun2(@(x)x.curid,models);
 bboxes = cell(1,length(grid));
+pos_wt_masks = cell(1, length(grid));
 maxos = cell(1,length(grid));
 
 try
@@ -40,6 +41,7 @@ end
 for i = 1:length(grid)  
   curid = grid{i}.curid;
   bboxes{i} = grid{i}.bboxes;
+  pos_wt_masks{i} = grid{i}.coarse_pos_wt_masks;
   if size(bboxes{i},1) == 0
     continue
   end
@@ -113,7 +115,8 @@ fprintf(1, 'Applying NMS (OS thresh=%.3f)\n',os_thresh);
 for i = 1:length(bboxes)
   if size(bboxes{i},1) > 0
     bboxes{i}(:,5) = 1:size(bboxes{i},1);
-    bboxes{i} = esvm_nms(bboxes{i},os_thresh);
+    [bboxes{i},picks] = esvm_nms(bboxes{i},os_thresh);
+    pos_wt_masks{i} = pos_wt_masks{i}(picks);
     if ~isempty(grid{i}.extras) && isfield(grid{i}.extras,'maxos')
       maxos{i} = maxos{i}(bboxes{i}(:,5));
     end
@@ -167,6 +170,7 @@ final_boxes = bboxes;
 final.unclipped_boxes = unclipped_boxes;
 final.final_boxes = final_boxes;
 final.final_maxos = maxos;
+final.pos_wt_masks = pos_wt_masks;
 
 %Create a string which summarizes the pooling type
 calib_string = '';

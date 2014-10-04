@@ -246,7 +246,8 @@ for k = 1:maxk
 
     current_rank = k;
     [NR, fig] = esvm_show_transfer_figure(I, models, allbb, ...
-                                   overlays, current_rank, corr, fig);
+                                   overlays, current_rank, corr, fig, ...
+                                   test_struct.pos_wt_masks);
     axis image
     drawnow
     snapnow
