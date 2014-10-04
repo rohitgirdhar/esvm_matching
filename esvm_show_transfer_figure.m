@@ -65,9 +65,9 @@ for i = 1:N
       hogpic = jettify(hogpic);
   else
       hogpic_pos = HOGpicture(models{topboxes(i,6)}.model.w .* ...
-        repmat(pos_wt_masks{i}{1} > 0, [1, 1, 31]));
+        repmat(pos_wt_masks{i} > 0, [1, 1, 31]));
       hogpic_neg = HOGpicture(models{topboxes(i,6)}.model.w .* ...
-        repmat(pos_wt_masks{i}{1} < 0, [1, 1, 31]));
+        repmat(pos_wt_masks{i} < 0, [1, 1, 31]));
       hogpic_pos = jettifyWithoutColors(hogpic_pos);
       hogpic_neg = jettifyWithoutColors(hogpic_neg);
       hogpic = zeros(size(hogpic_pos, 1), size(hogpic_pos, 2), 3);
@@ -82,7 +82,7 @@ for i = 1:N
   
   Iex = esvm_get_exemplar_icon(models, mid, topboxes(i,7));
   if SHOW_MATCHING_WTS == 1
-    score_wts = imresize(pos_wt_masks{i}{1}, [size(Iex, 1), size(Iex, 2)]);
+    score_wts = imresize(pos_wt_masks{i}, [size(Iex, 1), size(Iex, 2)]);
     color_mask = cat(3, score_wts <= 0, score_wts > 0, zeros(size(Iex,1), size(Iex,2)));
     if flip == 1
           color_mask = flip_image(color_mask);

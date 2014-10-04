@@ -51,6 +51,7 @@ final_boxes = test_struct.unclipped_boxes;
 final_maxos = test_struct.final_maxos;
 
 bbs = cat(1,final_boxes{:});
+wt_masks = cat(2, test_struct.pos_wt_masks{:});
 try
   imids = bbs(:,11);
 catch
@@ -121,7 +122,7 @@ for k = 1:maxk
       break;
     end
     
-        
+     
     filer = sprintf('%s/%05d%s.png',wwwdir,k,suffix);
     filerlock = [filer '.lock'];
 
@@ -132,7 +133,7 @@ for k = 1:maxk
 
     fprintf(1,'Showing detection # %d, score=%.3f\n', k, bbs(bb(counter),end));
     allbbs(k,:) = bbs(bb(counter),:);
-    
+
     curb = bb(counter);
 
     %curid = grid{imids(curb)}.curid;
@@ -187,6 +188,7 @@ for k = 1:maxk
     %USE THE RAW DETECTION
     %fprintf(1,' -- Taking Final det score\n');
     allbb = bbs(bb(counter),:);
+    all_wt_masks = wt_masks(bb(counter));
     
     %CVPR VERSION: use the top local score within a cluster
     %fprintf(1,' -- Finding within-cluster local max\n');
@@ -247,7 +249,7 @@ for k = 1:maxk
     current_rank = k;
     [NR, fig] = esvm_show_transfer_figure(I, models, allbb, ...
                                    overlays, current_rank, corr, fig, ...
-                                   test_struct.pos_wt_masks);
+                                   all_wt_masks);
     axis image
     drawnow
     snapnow
