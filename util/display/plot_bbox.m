@@ -97,5 +97,5 @@ if exist('titler','var') & length(titler)>0
   hold on;
   text(bb(1),bb(2),titler,'color','k','backgroundcolor',col1,...
        'verticalalignment','bottom','horizontalalignment','left', ...
-       'fontsize',min(50,max(10,round(fontscale))));
+       'fontsize',min(20,max(10,round(fontscale))));
 end
