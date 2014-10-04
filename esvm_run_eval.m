@@ -10,7 +10,7 @@ p = inputParser;
 addOptional(p, 'sync_folder', 'run_sync'); % set directory to use for syncing processes
 addOptional(p, 'cache_models', []); % set to directory path to cache models, else set to 0
 addOptional(p, 'res_folder', 'res'); % The folder to save result images
-addOptional(p, 'bow_res', '~/projects/001_ESVM/BoW/BoWImageSearch/eval/results/res_with_dist'); % The folder where BoW results might be present
+addOptional(p, 'bow_res', '/tmp'); % The folder where BoW results might be present
 parse(p, varargin{:});
 
 SYNC_FOLDER = p.Results.sync_folder;
@@ -49,7 +49,9 @@ for i = 1 : numel(testFilesList)
         %% actual computation
         I = imread(fullfile(imgsDir, testFpath));
         % resize, if larger than 640xX
-        I = imresize(I, [640, NaN]);
+        if size(I, 1) > 640
+            I = imresize(I, [640, NaN]);
+        end
         model_cache_path = fullfile(CACHE_DIR, ['model_' test_hash '.mat']);
         if ~isempty(CACHE_DIR) && exist(model_cache_path, 'file')
             load(model_cache_path);
@@ -88,6 +90,5 @@ for i = 1 : numel(testFilesList)
     clearvars -except testFilesList p SYNC_FOLDER CACHE_DIR ...
             imgsDir trainFilesListFpath testFilesListFpath negFolder;
     close all; % remove all the visualization plots from the memory
-    pack; % consolidate all memory
 end
 
