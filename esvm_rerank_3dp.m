@@ -85,8 +85,8 @@ for i = 1 : min(size(ranked_bbs, 1), topk)
     fprintf(fid, '%s : %f\n', t_fpath, mean(errMap(:)));
 
     %% plot the images
-    imwrite(qMap, fullfile(wwwdir, sprintf('%05d_3d_query.jpg', i)));
-    imwrite(tMap, fullfile(wwwdir, sprintf('%05d_3d_match.jpg', i)));
+    imwrite(qTempN, fullfile(wwwdir, sprintf('%05d_3d_query.jpg', i)));
+    imwrite(tMapN, fullfile(wwwdir, sprintf('%05d_3d_match.jpg', i)));
     imwrite(mat2gray(errMap), fullfile(wwwdir, sprintf('%05d_3d_err.jpg', i)));
 end
 fclose(fid);
