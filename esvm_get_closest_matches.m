@@ -13,6 +13,7 @@ addOptional(p, 'res_folder', 'res');
 % just search in head_trainFile top elements of the trainFile.
 % Useful when passing bow outputs
 addOptional(p, 'head_trainFile', -1);
+addOptional(p, 'query_fpath', -1); % REQUIRED for 3dp code
 parse(p, varargin{:});
 addpath(genpath('.'));
 
@@ -39,9 +40,15 @@ end
 
 params = esvm_get_default_params;
 params.dataset_params.localdir = p.Results.res_folder;
+params.write_bb = 1; % write the bounding boxes in output (top.txt) file
 fullpaths = cellfun(@(x) fullfile(imgsDir, x), frpaths, 'UniformOutput', false);
 local_detections = esvm_detect_imageset(fullpaths, models, params);
 result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
+if all(p.Results.query_fpath ~= -1)
+    esvm_rerank_3dp(result_struct, models, fullpaths, ...
+            p.Results.query_fpath, 20, params);
+end
+
 [~, imgs_dirname, ~] = fileparts(imgsDir);
 esvm_show_top_dets(result_struct, local_detections, ...
                               fullpaths, models, ...

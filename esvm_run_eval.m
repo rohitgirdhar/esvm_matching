@@ -75,7 +75,8 @@ for i = 1 : numel(testFilesList)
 
         esvm_get_closest_matches(models, imgsDir, trainFilesListFpath, ...
                 20, 'res_folder', p.Results.res_folder, ...
-                'head_trainFile', head_trainFile);
+                'head_trainFile', head_trainFile, ...
+                'query_fpath', testFpath);
 
 
         mkdir(fullfile(SYNC_FOLDER, [test_hash, '.done']));

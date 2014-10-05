@@ -190,3 +190,5 @@ default_params.SKIP_EVAL = 0;
 default_params.dataset_params.localdir = '';
 default_params.dataset_params.datadir = '';
 
+% output (top.txt) files dont print the bounding boxes by default
+default_params.write_bb = 0;
