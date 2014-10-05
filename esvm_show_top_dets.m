@@ -6,7 +6,9 @@ function allbbs = esvm_show_top_dets(test_struct, grid, ...
 % boxes after pooling and calibration. If [dataset_params.localdir] is
 % present, then results are saved based on naming convention into a
 % "www" subfolder. maxk is the number of top detections we show
-%
+% if [params.write_bb] is set, will write the bounding box coordinates to
+% file
+% 
 % NOTE: this function requires some cleanup, but is functional
 %
 % Copyright (C) 2011-12 by Tomasz Malisiewicz
@@ -105,7 +107,9 @@ end
 
 fid = -1;
 if CACHE_FILES == 1
-    fid = fopen(fullfile(wwwdir, 'top.txt'), 'w');
+    out_fpath = fullfile(wwwdir, 'top.txt');
+    fid = fopen(out_fpath, 'w');
+    fprintf('Writing output to %s\n', out_fpath);
 end
 
 counter = 1;
@@ -141,7 +145,11 @@ for k = 1:maxk
     I = (convert_to_I(test_set{bbs(bb(counter),11)}));
     [match_path, match_imgname, ~] = fileparts(test_set{bbs(bb(counter), 11)});
     [~, match_classname, ~] = fileparts(match_path);
-    fprintf(fid, '%s\n', fullfile(match_classname, match_imgname));
+    fprintf(fid, '%s', fullfile(match_classname, match_imgname));
+    if isfield(params, 'write_bb') && params.write_bb
+        fprintf(fid, ' %f %f %f %f', bbs(bb(counter), 1 : 4)); 
+    end
+    fprintf(fid, '\n');
     
     TARGET_BUS = -1;
 
