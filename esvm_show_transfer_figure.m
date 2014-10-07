@@ -83,11 +83,13 @@ for i = 1:N
   Iex = esvm_get_exemplar_icon(models, mid, topboxes(i,7));
   if SHOW_MATCHING_WTS == 1
     score_wts = imresize(pos_wt_masks{i}, [size(Iex, 1), size(Iex, 2)]);
-    color_mask = cat(3, score_wts <= 0, score_wts > 0, zeros(size(Iex,1), size(Iex,2)));
+    color_mask = cat(3, (-score_wts .* (score_wts <= 0)) ./ max(score_wts(:)), ... % R
+                        (score_wts .* (score_wts > 0)) ./ max(score_wts(:)), ... % G
+                        zeros(size(Iex,1), size(Iex,2))); % B
     if flip == 1
           color_mask = flip_image(color_mask);
     end
-    Iex = 0.8 .* Iex + 0.2 .* color_mask;
+    Iex = 0.5 .* Iex + 0.5 .* color_mask;
   end
   
   Iex1 = imresize(chunks{i},[size(Iex,1) size(Iex,2)]);

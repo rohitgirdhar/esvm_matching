@@ -31,7 +31,7 @@ bbs = cat(1, final_boxes{:});
 [~, bb] = sort(bbs(:, end), 'descend');
 ranked_bbs = bbs(bb, :);
 
-qMap = compute3DMap(q_fpath, 'sparse');
+qMap = compute3DMap(q_fpath, params.method_3d);
 if isempty(qMap)
     return;
 end
@@ -43,15 +43,17 @@ qMap = qMap(bbox(2) : min(bbox(2) + bbox(4), size(qMap, 1)), ...
             bbox(1) : min(bbox(1) + bbox(3), size(qMap, 2)), :);
 
 for i = 1 : min(size(ranked_bbs, 1), topk)
-    cur_box = bbs(i, :);
+    cur_box = ranked_bbs(i, :);
     t_fpath = test_fpaths{cur_box(11)};
-    tMap = compute3DMap(t_fpath, 'sparse');
+    tMap = compute3DMap(t_fpath, params.method_3d);
     if isempty(tMap)
         continue;
     end
     % clip out the bbox
-    tMap = tMap(max(round(bbs(i, 2)), 1) : min(round(bbs(i, 4)), size(tMap, 1)), ...
-                max(round(bbs(i, 1)), 1) : min(round(bbs(i, 3)), size(tMap, 2)), :);
+    tMap = tMap(max(round(cur_box(i, 2)), 1) : ...
+                    min(round(cur_box(i, 4)), size(tMap, 1)), ...
+                max(round(cur_box(i, 1)), 1) : ...
+                    min(round(cur_box(i, 3)), size(tMap, 2)), :);
     tMapNorm = sum(tMap .^ 2, 3);
     tMapN = bsxfun(@rdivide, tMap, tMapNorm + eps);
     tMask = tMapNorm > eps;

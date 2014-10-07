@@ -46,7 +46,7 @@ local_detections = esvm_detect_imageset(fullpaths, models, params);
 result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
 if all(p.Results.query_fpath ~= -1)
     esvm_rerank_3dp(result_struct, models, fullpaths, ...
-            p.Results.query_fpath, 20, params);
+            p.Results.query_fpath, topk, params);
 end
 
 [~, imgs_dirname, ~] = fileparts(imgsDir);

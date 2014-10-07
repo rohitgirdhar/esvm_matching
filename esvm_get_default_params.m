@@ -190,5 +190,8 @@ default_params.SKIP_EVAL = 0;
 default_params.dataset_params.localdir = '';
 default_params.dataset_params.datadir = '';
 
-% output (top.txt) files dont print the bounding boxes by default
-default_params.write_bb = 0;
+% output (top.txt) files print the bounding boxes by default
+default_params.write_bb = 1;
+
+% the method to use with David's 3D stuff (sparse/dense)
+default_params.method_3d = 'sparse';
