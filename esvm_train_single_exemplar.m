@@ -59,7 +59,7 @@ params.init_params.MAXDIM = 15;
 params.model_type = 'exemplar';
 
 %enable display so that nice visualizations pop up during learning
-params.dataset_params.display = 1;
+params.dataset_params.display = 0;
 
 %if localdir is not set, we do not dump files
 %params.dataset_params.localdir = '/nfs/baikal/tmalisie/synthetic/';
