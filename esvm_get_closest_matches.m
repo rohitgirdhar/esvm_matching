@@ -40,16 +40,20 @@ end
 
 params = esvm_get_default_params;
 params.dataset_params.localdir = p.Results.res_folder;
+params.dataset_params.display = 0;
 params.write_bb = 1; % write the bounding boxes in output (top.txt) file
 fullpaths = cellfun(@(x) fullfile(imgsDir, x), frpaths, 'UniformOutput', false);
 local_detections = esvm_detect_imageset(fullpaths, models, params);
 result_struct = esvm_pool_exemplar_dets(local_detections, models, [], params);
-if all(p.Results.query_fpath ~= -1)
-    esvm_rerank_3dp(result_struct, models, fullpaths, ...
-            p.Results.query_fpath, topk, params);
-end
+%if all(p.Results.query_fpath ~= -1)
+%    esvm_rerank_3dp(result_struct, models, fullpaths, ...
+%            p.Results.query_fpath, topk, params);
+%end
 
-[~, imgs_dirname, ~] = fileparts(imgsDir);
+[dir_path, imgs_dirname, ~] = fileparts(imgsDir);
+if isempty(imgsDir) && ~isempty(dir_path)  % happens when a trailing backslash
+    [~, imgs_dirname, ~] = fileparts(dir_path);
+end
 esvm_show_top_dets(result_struct, local_detections, ...
                               fullpaths, models, ...
                               params,  topk, imgs_dirname);
